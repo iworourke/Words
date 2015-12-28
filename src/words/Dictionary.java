@@ -7,6 +7,8 @@ package words;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,204 +18,208 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /**
- *
+ * A class that is used to represent a dictionary of words. For each entry in the
+ * dictionary, there is a representation of the word's conventional spelling,
+ * as well as a phonetic Spelling of the word. Since the dictionaries will tend
+ * to be fairly large text files, this class will refrain from maintaining a
+ * List or ArrayList of dictionary entries, and instead it will directly
+ * manipulate these text files.
  * @author iworourke
  */
 public class Dictionary {
     
-    private final ArrayList<DictionaryEntry> entries;
-    private String outputFileName;
-    private String inputFileName;
-    private int numEntries;
+    private File dictionaryFile;
     
-    
+    /**
+     * Default constructor.
+     */
     public Dictionary() {
-        entries = new ArrayList<>();
-        outputFileName = "";
-        inputFileName = "";
-        numEntries = 0;
+        dictionaryFile = null;
     }
     
+    /**
+     * Constructor that allows the caller to make copies of a Dictionary 
+     * instance.
+     * @param d the dictionary to make a copy of.
+     */
     public Dictionary(Dictionary d) {
-        entries = new ArrayList<>(d.getEntries());
-        outputFileName = d.getOutputFileName();
-        inputFileName = d.getInputFileName();
-        numEntries = d.getNumEntries();
+        dictionaryFile = d.getFile();
     }
     
-    public Dictionary(String inFileName, String outFileName) throws Exception {
-        entries = new ArrayList<>();
-        inputFileName = inFileName;
-        outputFileName = outFileName;
-        numEntries = 0;
-        addEntriesFromFile(inputFileName);
+    /**
+     * Constructor that initializes the dictionaryFile.
+     * @param file 
+     */
+    public Dictionary(File file) {
+        dictionaryFile = file;
     }
     
-    public ArrayList<DictionaryEntry> getEntries() {
-        return entries;
+    /**
+     * Getter for the dictionaryFile object.
+     * @return 
+     */
+    public File getFile() {
+        return dictionaryFile;
     }
     
-    public String getInputFileName() {
-        return  inputFileName;
+    /**
+     * Setter for dictionaryFile instance variable.
+     * @param file The file the dictionary will use to store its data.
+     */
+    public void setFile(File file) {
+        dictionaryFile = file;
+        if (!dictionaryFile.exists()) {
+            try {
+                dictionaryFile.createNewFile();
+            }
+            catch (Exception e) {
+                System.out.println("Error creating new file...");
+            }
+        }
     }
     
-    public String getOutputFileName() {
-        return outputFileName;
+    /**
+     * Checks the dictionaryFile for the number of entries in the dictionary by
+     * counting the number of new line characters.
+     * @return the number of entries in the dictionary.
+     * @throws Exception if the File object is invalid.
+     */
+    public int getNumEntries() throws Exception {
+        int numLines = 0;
+        FileReader fileReader = new FileReader(dictionaryFile);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        
+        while (bufferedReader.readLine() != null) {
+            numLines++;
+        }
+        bufferedReader.close();
+        
+        return numLines;
     }
     
-    public int getNumEntries() {
-        return numEntries;
+    /**
+     * Gets the DictionaryEntry at the specified index.
+     * @param index
+     * @return
+     * @throws Exception if the provided index is outside the bounds of the 
+     * Dictionary.
+     */
+    public DictionaryEntry getEntry(int index) throws Exception {
+        int counter = 0;
+        FileReader fileReader = new FileReader(dictionaryFile);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String s = "";
+        DictionaryEntry dAtIndex;
+        
+        while (counter != index && (s = bufferedReader.readLine()) != null) {
+            counter++;
+        }
+        dAtIndex = parseDictionaryEntryFromLine(s);
+        bufferedReader.close();
+        return dAtIndex;
     }
     
-    public DictionaryEntry getEntry(int index) {
-        return new DictionaryEntry(entries.get(index));
-    }
-    
-    public void setInputFileName(String newInputFileName) {
-        inputFileName = newInputFileName;
-    }
-    
-    public void setOutputFileName(String newOutputFileName) {
-        outputFileName = newOutputFileName;
-    }
     
     /**
      * Adds a DictionaryEntry to the dictionary. Will not add the entry to the
      * dictionary if the dictionary already contains an identical entry.
-     * @param d 
+     * @param d DictionaryEntry to be added to the dictionary.
+     * @throws java.io.IOException if there is an error reading from the file,
+     * which occurs when the method checks whether an entry is already in the 
+     * dictionary.
      */
-    public void addEntry(DictionaryEntry d) {
-        if (entries.contains(d) == false) {
-            entries.add(d);
-            numEntries++;
-        }
+    public void addEntry(DictionaryEntry d) throws IOException {
+        String text = d.getStringRepresentation();        
+        FileWriter fileWriter = new FileWriter(dictionaryFile, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.append(text + "\n");
+        bufferedWriter.close();
     }
+    
+    
     
     /**
      * Removes the DictionaryEntry at the specified index from the Dictionary.
      * @param index
      */
     public void removeEntry(int index) throws IndexOutOfBoundsException {
-        entries.remove(index);
-        numEntries--;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    /**
-     * Makes sure the DictionaryEntry objects are sorted in alphabetical order
-     * within the dictionary and updates the file where this data is backed up.
-     */
-    public void RefreshDictionary() {
-        sortEntries();
-        updateFile();
-    }
     
     /**
      * Sorts the ArrayList of DictionaryEntry objects using Selection Sort.
      */
     public void sortEntries() {
-        Collections.sort(entries);
+        //Collections.sort(entries);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     /**
-     * Adds each entry to the dictionary object from the specified file.
-     * @param fileWithEntries
-     * @throws java.lang.Exception If there is a problem reading from the file.
-     */
-    public void addEntriesFromFile(String fileWithEntries) throws Exception {
-        ArrayList<String> lines;
-        DictionaryEntry dictionaryEntryFromLine;
-        String line;
-        
-        lines = getLinesFromFile(fileWithEntries);
-        
-        for (String s : lines) {
-            dictionaryEntryFromLine = parseDictionaryEntryFromLine(s);
-            addEntry(dictionaryEntryFromLine);
-        }
-        sortEntries();
-    }
-    
-    /**
-     * Overridden hashCode method.
-     * @return a hashcode.
-     */
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.entries);
-        hash = 53 * hash + Objects.hashCode(this.inputFileName);
-        hash = 53 * hash + this.numEntries;
-        return hash;
-    }
-    
-    /**
-     * The overridden equals method, which will allow us to determine whether
-     * two dictionary objects are identical, and while I don't expect this to be
-     * useful in the primary application, it might be useful for testing the
-     * Dictionary class.
-     * @param other An object instance with which we compare "this" instance of
-     * a Dictionary object.
+     * Retrieves the PhoneticRepresentation that corresponds to the provided 
+     * spelling. If the word cannot be found, returns null.
+     * @param wordAsString
      * @return 
      */
-    @Override public boolean equals(Object other) {
-        boolean answer = true;
+    PhoneticRepresentation getPhoneticRepresentationForWord(String wordAsString) throws FileNotFoundException, IOException {
+        boolean found = false;
+        String textFileLine;
         
-        if (other instanceof Dictionary) {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(dictionaryFile));
+        PhoneticRepresentation phoneticRep = null;
+        
+        while (!found && (textFileLine = bufferedReader.readLine()) != null) {
             
-            ArrayList<DictionaryEntry> list1 = entries;
-            ArrayList<DictionaryEntry> list2 = ((Dictionary) other).getEntries();
-            if (!list1.equals(list2)) {
-                answer = false;
+            Word word = parseWordFromLine(textFileLine);
+            
+            if (word.getConventionalSpelling().equals(wordAsString)) {
+                
+                found = true;
+                phoneticRep = word.getPhoneticRepresentation();
+                
             }
             
-            int numEntries1 = numEntries;
-            int numEntries2 = ((Dictionary) other).getNumEntries();
-            if (numEntries1 != numEntries2) {
-                answer = false;
-            }
-            
-            String fileName1 = inputFileName;
-            String fileName2 = ((Dictionary) other).getInputFileName();
-            if (!fileName1.equals(fileName2)) {
-                answer = false;
-            }
-            
-            fileName1 = outputFileName;
-            fileName2 = ((Dictionary) other).getOutputFileName();
-            if (!fileName1.equals(fileName2)) {
-                answer = false;
-            }
         }
-        return answer;
+        
+        bufferedReader.close();
+        
+        return phoneticRep;
     }
-    
+
     /**
-     * A support method that retrieves all the lines in the file in the form of
-     * an ArrayList<String>.
-     * @param fileWithEntries The name of the file which will supply the
-     * dictionary entries.
-     * @return an ArrayList that contains each line in the file.
-     * @throws Exception if there is a problem while reading from the file.
+     * Scans the dictionaryFile to determine whether it contains a specific
+     * DictionaryEntry object.
+     * @param d Dictionary Entry object which we are looking for
+     * @return true if the entry is found; false otherwise.
+     * @throws FileNotFoundException if the dictionaryFile object has not been 
+     * initialized or cannot be found.
+     * @throws IOException if there is an error reading from the dictionaryFile.
      */
-    private ArrayList<String> getLinesFromFile(String fileWithEntries) throws Exception {
-        String line;
-        ArrayList<String> lines = new ArrayList<>();
-        FileReader fileReader = new FileReader(fileWithEntries);
+    private boolean dictionaryFileContains(DictionaryEntry d) throws FileNotFoundException, IOException {
+        boolean found = false;
+        String textFileLine;
+        String wordAsString = d.getWord().getConventionalSpelling();
+        
+        FileReader fileReader = new FileReader(dictionaryFile);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
-        while ((line = bufferedReader.readLine()) != null) {
-            lines.add(line);
+        
+        while ((textFileLine = bufferedReader.readLine()) != null && !found) {
+            Word word = parseWordFromLine(textFileLine);
+            DictionaryEntry textFileDictEntry = parseDictionaryEntryFromLine(textFileLine);
+            if (d.equals(textFileDictEntry)) {
+                found = true;
+            }
         }
         bufferedReader.close();
-        return lines;
+        
+        return found;
     }
     
-    
-
     /**
      * A support method that is responsible for converting a single String
      * representation of a dictionary entry into a DictionaryEntry object. It is
      * based upon the structure of the CMU dictionary.
-     * @param s
+     * @param s the string that will be parsed into a dictionaryEntry object.
      * @return 
      */
     private DictionaryEntry parseDictionaryEntryFromLine(String s) {
@@ -222,6 +228,12 @@ public class Dictionary {
         return dictionaryEntry;
     }
     
+    /**
+     * Translates a formatted string (in the style of the CMU Phonetic
+     * Dictionary) into a Word object.
+     * @param s the string which contains the data to create a Word object.
+     * @return the Word object.
+     */
     private Word parseWordFromLine(String s) {
         Word w;
         String spelling;
@@ -239,34 +251,4 @@ public class Dictionary {
         
         return w;
     }
-    
-    /**
-     * Updates the file to contain the data within the "entries" object.
-     */
-    private void updateFile() {
-        try {
-            FileWriter fileWriter = new FileWriter(inputFileName);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            for (DictionaryEntry d : entries) {
-                bufferedWriter.write(d.getStringRepresentation() + "\n");
-            }
-            bufferedWriter.close();
-        }
-        catch (IOException e) {
-            System.out.println("An error occurred while trying to write to the"
-                    + " file" + inputFileName);
-        }
-    }
-
-    /**
-     * Retrieves the PhoneticRepresentation that corresponds to the provided 
-     * spelling.
-     * @param wordAsString
-     * @return 
-     */
-    PhoneticRepresentation getPhoneticRepresentationForWord(String wordAsString) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
 }

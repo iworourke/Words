@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 package words;
-
-
-import java.util.*;
 /**
- *
+ * Dictionary Entry object contains only a word instance, but I expect this to
+ * change over time. 
  * @author iworourke
  */
 public class DictionaryEntry implements Comparable<DictionaryEntry> {
@@ -41,7 +39,7 @@ public class DictionaryEntry implements Comparable<DictionaryEntry> {
      */
     public String getStringRepresentation() {
         String str = "";
-        str = str.concat(word.getLiteralText().toUpperCase() + " " + 
+        str = str.concat(word.getConventionalSpelling().toUpperCase() + " " + 
                 word.getPhoneticRepresentation().toString());
         return str;
     }
