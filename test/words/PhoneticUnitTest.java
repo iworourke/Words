@@ -64,4 +64,18 @@ public class PhoneticUnitTest {
         assertFalse(instance1.hashCode() == instance3.hashCode());
     }
 
+    /**
+     * Test of getText method, of class PhoneticUnit.
+     */
+    @Test
+    public void testGetText() {
+        System.out.println("getText");
+        PhoneticUnit instance = new PhoneticUnit(p1);
+        String expResult = "IY";
+        String result = instance.getText();
+        assertEquals(expResult, result);
+    }
+
+
+
 }

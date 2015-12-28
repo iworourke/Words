@@ -76,4 +76,7 @@ public class PhoneticRepresentationTest {
         assertTrue(instance1.hashCode() == instance2.hashCode());
         assertFalse(instance1.hashCode() == instance3.hashCode());
     }
+
+ 
+
 }

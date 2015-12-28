@@ -6,9 +6,7 @@
 package words;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -43,7 +41,7 @@ public class WordTest {
      * Test of isLiteralMatch method, of class Word.
      */
     @Test
-    public void testIsLiteralMatch() {
+    public void testConventionalSpellingMatches() {
         Word instance, candidate;
         boolean expResult, result;
         
@@ -52,12 +50,12 @@ public class WordTest {
         instance = new Word(word1);
         candidate = new Word(word1);
         expResult = true;
-        result = instance.isLiteralMatch(candidate);
+        result = instance.conventionalSpellingMatches(candidate);
         assertEquals(expResult, result);
         
         candidate = new Word(word3);
         expResult = false;
-        result = instance.isLiteralMatch(candidate);
+        result = instance.conventionalSpellingMatches(candidate);
         assertEquals(expResult, result);
     }
 
@@ -65,7 +63,7 @@ public class WordTest {
      * Test of isPhoneticMatch method, of class Word.
      */
     @Test
-    public void testIsPhoneticMatch() {
+    public void testPhoneticSpellingMatches() {
         Word candidate, instance;
         boolean expResult, result;
         
@@ -74,12 +72,12 @@ public class WordTest {
         instance = new Word(word1);
         candidate = new Word(word1);
         expResult = true;
-        result = instance.isPhoneticMatch(candidate);
+        result = instance.phoneticSpellingMatches(candidate);
         assertEquals(expResult, result);
         
         candidate = new Word(word3);
         expResult = false;
-        result = instance.isPhoneticMatch(candidate);
+        result = instance.phoneticSpellingMatches(candidate);
         assertEquals(expResult, result);
     }
 
@@ -146,5 +144,6 @@ public class WordTest {
         int result = instance.compareTo(o);
         assertEquals(expResult, result);
     }
+
     
 }

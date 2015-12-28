@@ -27,10 +27,10 @@ public class PoemTest {
     private Poem poem1;
     private ArrayList<Word> a1, a2, a3;
     private PhoneticRepresentation pr1, pr2, pr3, pr4;
-    private String busText = "B AH S";
-    private String mudText = "M AH D";
-    private String dogText = "D AO G";
-    private String muttText = "M AH T";
+    private String busText;
+    private String mudText;
+    private String dogText;
+    private String muttText;
     
     public PoemTest() {
     }
@@ -45,6 +45,10 @@ public class PoemTest {
             "It never takes too long",
             "No matter what I say or do",
             "I will still feel you here till the moment I am gone"};*/
+        busText = "B AH S";
+        mudText = "M AH D";
+        dogText = "D AO G";
+        muttText = "M AH T";
         initializeWords();
         initializeArrayLists();
         initializeLines();
@@ -181,8 +185,16 @@ public class PoemTest {
         System.out.println("getLineAtIndex");
         int index = 0;
         Poem instance = new Poem(poem1);
-        Line expResult = line1;
-        Line result = instance.getLineAtIndex(index);
+        Line expResult = line1, result = null;
+        boolean thrown = false;
+        
+        try {
+            result = instance.getLineAtIndex(index);
+        }
+        catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
         assertEquals(expResult, result);
     }
 
