@@ -175,6 +175,15 @@ public class DictionaryTest implements GlobalPathNames {
             thrown = true;
         }
         assertTrue(!thrown);
+        
+        Dictionary cmuDict = new Dictionary(new File(CMU_PATH + CMU_DICT));
+        
+        try {
+            System.out.println("****** SOMETHING: " + cmuDict.getPhoneticRepresentationForWord("SOMETHING"));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 }

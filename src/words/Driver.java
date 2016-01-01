@@ -5,46 +5,108 @@
  */
 package words;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
+import words.Controller.Controller;
+import words.View.View;
+import javax.swing.*;
 
 /**
  *
  * @author iworourke
  */
-public class Driver {
+public class Driver implements GlobalPathNames {
     
-    public static void main(String[] args) {
-        String CmuPath = "support_files/CMU_Dictionary",
+    public static void main(String[] args)  {
+        /*String CmuPath = "support_files/CMU_Dictionary/",
                 CmuDict = "CMU_Dict",
                 CmuPhones = "CMU_Phones",
-                CmuSymbols = "CMU_Symbols";
+                CmuSymbols = "CMU_Symbols";*/
         String[] gravityLyrics = new String[]{
             "Something always brings me back to you", 
             "It never takes too long",
             "No matter what I say or do",
             "I will still feel you here till the moment I am gone"};
-        String specificDictionaryName = "TEMP_GRAV_POEM";
         
-        Dictionary fullDictionary = new Dictionary();
-        //Dictionary poemSpecificDictionary = new Dictionary(specificDictionaryName, specificDictionaryName);
+        Dictionary fullDictionary = new Dictionary(new File(CMU_PATH + CMU_DICT));
+        
+        ArrayList<Line> gravityLines = new ArrayList<>();
+        initGravityLines(gravityLyrics, fullDictionary, gravityLines);
+        
+        //DO MVC stuff
+        Poem model = new Poem();
+        constructPoemObject(gravityLyrics, fullDictionary, model);
+        printPoemPhonetically(model);
+        //View view = new View();
+        
+        //model.addObserver(view);
+        //Controller controller = new Controller();
+        //controller.addModel(model);
+        //controller.addView(view);
+        //controller.initModel(gravityLines);
+        //view.addController(controller);
+        
+    }
+    
+    private static void initGravityLines(String[] gravityLyrics, Dictionary fullDictionary, ArrayList<Line> lineList) {
+        
         
         for (String s : gravityLyrics) {
+            
             Scanner wordScanner = new Scanner(s);
-            String wordAsString;
-            Word word;
-            PhoneticRepresentation phoneticRepresentation;
+            Line line = new Line();
             
             while(wordScanner.hasNext()) {
-                wordAsString = wordScanner.next();
-                phoneticRepresentation = fullDictionary.getPhoneticRepresentationForWord(wordAsString);
-                word = new Word(wordAsString, phoneticRepresentation);
-                DictionaryEntry d = new DictionaryEntry(word);
-                //poemSpecificDictionary.add(d);
+                
+                String wordAsString = wordScanner.next();
+                
+                try {
+                    PhoneticRepresentation phoneticRepresentation = fullDictionary.getPhoneticRepresentationForWord(wordAsString.toUpperCase());
+                    Word word = new Word(wordAsString, phoneticRepresentation);
+                    line.addWordToLine(word);
+                }
+                catch (Exception e) {
+                    System.out.println("There was a problem");
+                }
             }
             
-            
-            
-            
+            lineList.add(line);
         }
     }
+    
+    public static void constructPoemObject(String[] gravityLyrics, Dictionary fullDictionary, Poem poem) {        
+        for (String s : gravityLyrics) {
+            
+            Scanner wordScanner = new Scanner(s);
+            Line line = new Line();
+            
+            while(wordScanner.hasNext()) {
+                
+                String wordAsString = wordScanner.next();
+                
+                try {
+                    PhoneticRepresentation phoneticRepresentation = fullDictionary.getPhoneticRepresentationForWord(wordAsString.toUpperCase());
+                    Word word = new Word(wordAsString, phoneticRepresentation);
+                    line.addWordToLine(word);
+                }
+                catch (Exception e) {
+                    System.out.println("There was a problem");
+                }
+            }
+            poem.addLineToPoem(line);
+        }
+    }
+
+    private static void printPoemPhonetically(Poem poem) {
+        for (Line line : poem.getLines()) {
+            
+            for (Word w : line.getWords()) {
+                System.out.print(w.getPhoneticText());
+                System.out.print(" ");
+            }
+            System.out.print("\n");
+        }
+    }
+    
 }

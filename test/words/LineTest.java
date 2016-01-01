@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.not;
 
 /**
  *
@@ -99,20 +100,20 @@ public class LineTest {
     
     
     /**
-     * Test of getWordSequence method, of class Line.
+     * Test of getWords method, of class Line.
      * 
-     * getWordSequence returns an ArrayList, so we should be checking whether 
-     * the two ArrayLists contain exactly the same elements.
+     * getWords returns an ArrayList, so we should be checking whether 
+ the two ArrayLists contain exactly the same elements.
      */
     @Test
-    public void testGetWordSequence() {
+    public void testGetWords() {
         System.out.println("getWordSequence");
         Line instance = line1; 
         ArrayList<Word> expResult = new ArrayList<>();
         expResult.add(word1);
         expResult.add(word2);
         expResult.add(word3);
-        ArrayList result = instance.getWordSequence();
+        ArrayList result = instance.getWords();
         assertEquals(expResult, result);
     }
 

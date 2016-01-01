@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 public class Line {
     
-    private ArrayList<Word> wordSequence;
+    private ArrayList<Word> words;
     
     /**
      * Non-default constructor which initializes the Line according to the 
@@ -22,7 +22,7 @@ public class Line {
      * @param wordSequence Sequence of words that this line shall contain.
      */
     public Line(ArrayList wordSequence) {
-        this.wordSequence = new ArrayList<>(wordSequence);
+        this.words = new ArrayList<>(wordSequence);
     }
     
     /**
@@ -31,14 +31,14 @@ public class Line {
      * @param l the line that we are going to clone.
      */
     public Line(Line l) {
-        wordSequence = new ArrayList<>(l.getWordSequence());
+        words = new ArrayList<>(l.getWords());
     }
     
     /**
      * Default constructor.
      */
     public Line() {
-        wordSequence = new ArrayList<>();
+        words = new ArrayList<>();
     }
     
     /**
@@ -55,12 +55,12 @@ public class Line {
     
     
     /**
-     * Getter for the wordSequence instance variable.
+     * Getter for the words instance variable.
      * @return the words that make up this line object represented as an 
      *  ArrayList.
      */
-    public ArrayList getWordSequence() {
-        return wordSequence;
+    public ArrayList<Word> getWords() {
+        return words;
     }
     
     /**
@@ -68,7 +68,7 @@ public class Line {
      * @return the number of words in the line.
      */
     public int getNumWords() {
-        return wordSequence.size();
+        return words.size();
     }
     
     /**
@@ -77,7 +77,7 @@ public class Line {
      * @return a word object found at the provided instance.
      */
     public Word getWordAtIndex(int index) {
-        return wordSequence.get(index);
+        return words.get(index);
     }
     
     /**
@@ -103,7 +103,7 @@ public class Line {
         if (!linesAreSameLength(candidate)) {
             return false;
         }
-        for (int i = 0; i < wordSequence.size() && result == true; i++) {
+        for (int i = 0; i < words.size() && result == true; i++) {
             Word leftWord = candidate.getWordAtIndex(i);
             Word rightWord = this.getWordAtIndex(i);
             if (!leftWord.conventionalSpellingMatches(rightWord)) {
@@ -124,7 +124,7 @@ public class Line {
         if (!linesAreSameLength(candidate)) {
             return false;
         }
-        for (int i = 0; i < wordSequence.size() && result == true; i++) {
+        for (int i = 0; i < words.size() && result == true; i++) {
             Word leftWord = candidate.getWordAtIndex(i);
             Word rightWord = this.getWordAtIndex(i);
             if (!leftWord.phoneticSpellingMatches(rightWord)) {
@@ -135,21 +135,21 @@ public class Line {
     }
     
     /**
-     * Adds a word to the end of the ArrayList "wordSequence".
+     * Adds a word to the end of the ArrayList "words".
      * @param word to be added to the Line.
      */
     public void addWordToLine(Word word) {
-        wordSequence.add(word);
+        words.add(word);
     }
     
     /**
      * Removes the word at the specified index from the line.
      * @param index of the word which should be removed.
      * @throws Exception if the index does not fall within the bounds of the 
-     * ArrayList wordSequence.
+ ArrayList words.
      */
     public void removeWordFromLine(int index) throws Exception {
-        wordSequence.remove(index);
+        words.remove(index);
     }
     
     /**
@@ -157,10 +157,10 @@ public class Line {
      */
     public void printLine() {
         int i = 0;
-        for (Word w : wordSequence) {
+        for (Word w : words) {
             w.printConventionalSpelling();
             
-            if (i != wordSequence.size() - 1) {
+            if (i != words.size() - 1) {
                 System.out.print(" ");
             }
         }
@@ -174,7 +174,7 @@ public class Line {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 31 * hash + Objects.hashCode(this.wordSequence);
+        hash = 31 * hash + Objects.hashCode(this.words);
         return hash;
     }
     
@@ -192,5 +192,14 @@ public class Line {
             }
         }
         return answer;
+    }
+    
+    public String getConventionalText() {
+        String text = "";
+        
+        for (Word w : words) {
+            text.concat(w.getConventionalSpelling() + " ");
+        }
+        return text;
     }
 }

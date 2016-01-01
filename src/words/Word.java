@@ -60,6 +60,10 @@ public class Word implements Comparable<Word> {
     public PhoneticRepresentation getPhoneticRepresentation() {
         return new PhoneticRepresentation(phoneticRep);
     }
+    
+    public String getPhoneticText() {
+        return phoneticRep.toString();
+    }
 
     /**
      * Setter for the spelling of the word instance.
@@ -150,7 +154,7 @@ public class Word implements Comparable<Word> {
         }
         return answer;
     }
-
+    
     /**
      * Compares this object with the specified object for order, using only the
      * conventional spelling of the word.

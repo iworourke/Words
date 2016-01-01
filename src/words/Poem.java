@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * The poem class is used to represent a lyrical poem.
  * @author iworourke
  */
-public class Poem {
+public class Poem extends java.util.Observable {
     
     private ArrayList<Line> poemLines;
     
@@ -27,6 +27,7 @@ public class Poem {
      * Default constructor for the Poem class.
      */
     public Poem() {
+        System.out.println("Model()");
         poemLines = new ArrayList<>();
     }
     
@@ -44,6 +45,8 @@ public class Poem {
      */
     public void addLineToPoem(Line line) {
         poemLines.add(line);
+        setChanged();
+        notifyObservers(poemLines);
     }
     
     /**
@@ -64,6 +67,7 @@ public class Poem {
      */
     public void removeLineFromPoem(int index) throws Exception {
         poemLines.remove(index);
+        notifyObservers(poemLines);
     }
     
     /**
@@ -92,5 +96,29 @@ public class Poem {
         for (Line l : poemLines) {
             l.printLine();
         }
+    }
+    
+    /**
+     * 
+     * @param newValue 
+     */
+    public void setValue(ArrayList<Line> newValue) {
+        this.poemLines = newValue;
+        System.out.println("Model init: gravity lines");
+        setChanged();
+        notifyObservers(poemLines);
+    }
+    
+    public void getConventionalText() {
+        String text = "";
+        for (Line l : poemLines) {
+            text.concat(l.getConventionalText() + "\n");
+        }
+    }
+    
+    public void rotateLines() {
+        Line l = new Line(poemLines.get(0));
+        poemLines.remove(0);
+        poemLines.add(l);
     }
 }
