@@ -48,7 +48,7 @@ public class Dictionary {
     
     /**
      * Constructor that initializes the dictionaryFile.
-     * @param file 
+     * @param file value for the dictionaryFile attribute.
      */
     public Dictionary(File file) {
         dictionaryFile = file;
@@ -56,7 +56,7 @@ public class Dictionary {
     
     /**
      * Getter for the dictionaryFile object.
-     * @return 
+     * @return The dictionaryFile attribute.
      */
     public File getFile() {
         return dictionaryFile;
@@ -80,7 +80,9 @@ public class Dictionary {
     
     /**
      * Checks the dictionaryFile for the number of entries in the dictionary by
-     * counting the number of new line characters.
+     * counting the number of times the readLine() operation can be performed
+     * before it returns null, which means that end-of-file has been 
+     * encountered; this operation is extremely expensive.
      * @return the number of entries in the dictionary.
      * @throws Exception if the File object is invalid.
      */
@@ -99,8 +101,8 @@ public class Dictionary {
     
     /**
      * Gets the DictionaryEntry at the specified index.
-     * @param index
-     * @return
+     * @param index the index of the DictionaryEntry to retrieve.
+     * @return The desired DictionaryEntry object.
      * @throws Exception if the provided index is outside the bounds of the 
      * Dictionary.
      */
@@ -158,10 +160,12 @@ public class Dictionary {
     /**
      * Retrieves the PhoneticRepresentation that corresponds to the provided 
      * spelling. If the word cannot be found, returns null.
-     * @param wordAsString
-     * @return 
+     * @param wordAsString The conventional spelling of a word for which a
+     * PhoneticRepresentation is desired.
+     * @return A PhoneticRepresentation object for the provided word, 
+     * represented by its conventional spelling.
      */
-    PhoneticRepresentation getPhoneticRepresentationForWord(String wordAsString) throws FileNotFoundException, IOException {
+    public PhoneticRepresentation getPhoneticRepresentationForWord(String wordAsString) throws FileNotFoundException, IOException {
         boolean found = false;
         String textFileLine;
         
@@ -220,7 +224,7 @@ public class Dictionary {
      * representation of a dictionary entry into a DictionaryEntry object. It is
      * based upon the structure of the CMU dictionary.
      * @param s the string that will be parsed into a dictionaryEntry object.
-     * @return 
+     * @return A DictionaryEntry object based on the provided string.
      */
     private DictionaryEntry parseDictionaryEntryFromLine(String s) {
         Word word = parseWordFromLine(s);
