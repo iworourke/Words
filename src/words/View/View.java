@@ -5,14 +5,10 @@
  */
 package words.View;
 
-import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.Observable;
-import words.Line;
 
-import words.Poem;
 
 /**
  *
@@ -20,30 +16,19 @@ import words.Poem;
  */
 public class View implements java.util.Observer {
 
-    private TextField myTextField;
-    private Button button;
+    private JTextField myTextField;
+    private JButton button;
+    private final WordsUI ui;
 
     /**
      * 
      */
     public View() {
         System.out.println("View()");
-        
-        Frame frame = new Frame("simple MVC");
-        frame.add("North", new Label("counter"));
-        
-        myTextField = new TextField();
-        frame.add("Center", myTextField);
-        
-        Panel panel = new Panel();
-        button = new Button("PressMe");
-        panel.add(button);
-        frame.add("South", panel);
-        
-        frame.addWindowListener(new CloseListener());
-        frame.setSize(200,100);
-        frame.setLocation(100, 100);
-        frame.setVisible(true);
+        ui = new WordsUI();
+        ui.addWindowListener(new CloseListener());
+        ui.setLocation(100,100);
+        ui.setVisible(true);
     }
     
     
@@ -55,9 +40,7 @@ public class View implements java.util.Observer {
      */
     @Override
     public void update(Observable o, Object arg) {        
-        ArrayList<Line> test = (ArrayList<Line>)arg;
-        String conventionalText = test.get(0).getConventionalText();
-        myTextField.setText(conventionalText);
+        ui.update(o, arg);
     }
     
     /**
@@ -65,18 +48,19 @@ public class View implements java.util.Observer {
      * @param s 
      */
     public void setValue(String s) {
-        myTextField.setText(s);
+        ui.setValue(s);
     }
     
     public void addController(ActionListener controller) {
         System.out.println("View: adding controller");
-        button.addActionListener(controller);
+        ui.addControllerToButton(controller);
     }
     
     /**
      * Found this at link: <http://www.austintek.com/mvc/>
      */
     public static class CloseListener extends WindowAdapter {
+        @Override
         public void windowClosing(WindowEvent e) {
             e.getWindow().setVisible(false);
             System.exit(0);

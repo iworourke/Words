@@ -138,8 +138,6 @@ public class Dictionary {
         bufferedWriter.close();
     }
     
-    
-    
     /**
      * Removes the DictionaryEntry at the specified index from the Dictionary.
      * @param index

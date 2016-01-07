@@ -5,12 +5,16 @@
  */
 package words;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 import words.Controller.Controller;
 import words.View.View;
 import javax.swing.*;
+import words.Model.Model;
+import words.View.WordsUI;
 
 /**
  *
@@ -23,29 +27,34 @@ public class Driver implements GlobalPathNames {
                 CmuDict = "CMU_Dict",
                 CmuPhones = "CMU_Phones",
                 CmuSymbols = "CMU_Symbols";*/
-        String[] gravityLyrics = new String[]{
-            "Something always brings me back to you", 
-            "It never takes too long",
-            "No matter what I say or do",
-            "I will still feel you here till the moment I am gone"};
+        String[] whiteWinterHymnalLyrics = new String[]{
+            "I was following the pack all swallowed in their coats", 
+            "with scarves of red tied round their throats",
+            "to keep their little heads from falling in the snow",
+            "And I turn round and there you go"};
         
         Dictionary fullDictionary = new Dictionary(new File(CMU_PATH + CMU_DICT));
         
         ArrayList<Line> gravityLines = new ArrayList<>();
-        initGravityLines(gravityLyrics, fullDictionary, gravityLines);
+        initGravityLines(whiteWinterHymnalLyrics, fullDictionary, gravityLines);
+        
+        
+        Poem starting_poem = new Poem();
+        constructPoemObject(whiteWinterHymnalLyrics, fullDictionary, starting_poem);
+        printPoemPhonetically(starting_poem);
         
         //DO MVC stuff
-        Poem model = new Poem();
-        constructPoemObject(gravityLyrics, fullDictionary, model);
-        printPoemPhonetically(model);
-        //View view = new View();
+        Model myModel = new Model();
+        View myView = new View();
         
-        //model.addObserver(view);
-        //Controller controller = new Controller();
-        //controller.addModel(model);
-        //controller.addView(view);
-        //controller.initModel(gravityLines);
-        //view.addController(controller);
+        myModel.addObserver(myView);
+        
+        Controller myController = new Controller();
+        myController.addModel(myModel);
+        myController.addView(myView);
+        myController.initModel(starting_poem);
+        
+        myView.addController(myController);
         
     }
     
@@ -108,5 +117,5 @@ public class Driver implements GlobalPathNames {
             System.out.print("\n");
         }
     }
-    
+   
 }

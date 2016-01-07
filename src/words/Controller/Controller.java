@@ -9,8 +9,10 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import words.Dictionary;
 import words.Line;
+import words.Model.Model;
 import words.Poem;
 import words.View.View;
+import words.View.WordsUI;
 
 /**
  *
@@ -19,13 +21,8 @@ import words.View.View;
 public class Controller implements java.awt.event.ActionListener {
     
     private Dictionary cmuDict;
-    private Poem model;
+    private Model model;
     private View view;
-    
-    public Controller(Poem model, View view) {
-        this.model = model;
-        this.view = view;
-    }
     
     /**
      * <http://www.austintek.com/mvc/>
@@ -47,9 +44,9 @@ public class Controller implements java.awt.event.ActionListener {
      * <http://www.austintek.com/mvc/>
      * 
      */
-    public void addModel(Poem m) {
+    public void addModel(Model m) {
         System.out.println("Controller: adding model");
-        this.model = m;
+        model = m;
     }
     
     /**
@@ -63,9 +60,9 @@ public class Controller implements java.awt.event.ActionListener {
     
     /**
      * <http://www.austintek.com/mvc/>
-     * @param x 
+     * @param p poem object to initialize the Model with. 
      */
-    public void initModel(ArrayList<Line> x) {
-        model.setValue(x);
+    public void initModel(Poem p) {
+        model.setValue(p);
     }
 }

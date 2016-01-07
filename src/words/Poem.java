@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * The poem class is used to represent a lyrical poem.
  * @author iworourke
  */
-public class Poem extends java.util.Observable {
+public class Poem {
     
     private ArrayList<Line> poemLines;
     
@@ -45,8 +45,6 @@ public class Poem extends java.util.Observable {
      */
     public void addLineToPoem(Line line) {
         poemLines.add(line);
-        setChanged();
-        notifyObservers(poemLines);
     }
     
     /**
@@ -62,12 +60,13 @@ public class Poem extends java.util.Observable {
     /**
      * Removes a line from the ArrayList "poemLines" at the specified index.
      * @param index the index of the Line to be removed.
+     * @return The Line object removed from the poem.
      * @throws java.lang.Exception if the index does not fall within the bounds
      * of the ArrayList.
      */
-    public void removeLineFromPoem(int index) throws Exception {
-        poemLines.remove(index);
-        notifyObservers(poemLines);
+    public Line removeLineFromPoem(int index) throws Exception {
+        Line l = poemLines.remove(index);
+        return l;
     }
     
     /**
@@ -98,27 +97,4 @@ public class Poem extends java.util.Observable {
         }
     }
     
-    /**
-     * 
-     * @param newValue 
-     */
-    public void setValue(ArrayList<Line> newValue) {
-        this.poemLines = newValue;
-        System.out.println("Model init: gravity lines");
-        setChanged();
-        notifyObservers(poemLines);
-    }
-    
-    public void getConventionalText() {
-        String text = "";
-        for (Line l : poemLines) {
-            text.concat(l.getConventionalText() + "\n");
-        }
-    }
-    
-    public void rotateLines() {
-        Line l = new Line(poemLines.get(0));
-        poemLines.remove(0);
-        poemLines.add(l);
-    }
 }

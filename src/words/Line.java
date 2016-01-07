@@ -194,11 +194,11 @@ public class Line {
         return answer;
     }
     
-    public String getConventionalText() {
-        String text = "";
+    public String getConventionalText(String text) {
+        
         
         for (Word w : words) {
-            text.concat(w.getConventionalSpelling() + " ");
+            text = text.concat(w.getConventionalSpelling() + " ");
         }
         return text;
     }
