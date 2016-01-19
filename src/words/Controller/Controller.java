@@ -12,7 +12,7 @@ import words.Line;
 import words.Model.Model;
 import words.Poem;
 import words.View.View;
-import words.View.WordsUI;
+import words.View.UI;
 
 /**
  *

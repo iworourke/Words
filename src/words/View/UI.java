@@ -6,26 +6,39 @@
 package words.View;
 
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Observable;
-import words.Line;
 import words.Poem;
 
 /**
  *
  * @author iworourke
  */
-public class WordsUI extends javax.swing.JFrame {
-
+public class UI extends javax.swing.JFrame {
+    
     /**
      * Creates new form WordsUI
      */
-    public WordsUI() {
+    public UI() {
         initComponents();
-        
     }
 
+    /**
+     * 
+     * @param o
+     * @param arg 
+     */
+    public void update(Observable o, Object arg) {
+        try {
+            Poem poem = (Poem)arg;
+            poemJPanel1.refreshPoem(poem);
+            revalidate();
+            repaint();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,37 +49,28 @@ public class WordsUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        poemJPanel1 = new words.View.PoemJPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("jTextField1");
-
-        jButton1.setText("jButton1");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(129, 129, 129)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(178, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(poemJPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(204, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(124, 124, 124)
-                .addComponent(jButton1)
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(poemJPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -87,50 +91,18 @@ public class WordsUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
-    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
+    private words.View.PoemJPanel poemJPanel1;
     // End of variables declaration//GEN-END:variables
-    
-    public void setValue(String s) {
-        jTextField1.setText(s);
-    }
-    
-    public void addControllerToButton(ActionListener controller) {
-        System.out.println("View: adding controller");
-        jButton1.addActionListener(controller);
-    }
-    
-    
-    public void update(Observable o, Object arg) {
-        try {
-            Poem poem = (Poem)arg;
-            Line line = poem.getLineAtIndex(0);
-            String text = "";
-            text = line.getConventionalText(text);
-            System.out.println("TEXT VALUE: " + text);
-            jTextField1.setText(text);
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    
     
 }

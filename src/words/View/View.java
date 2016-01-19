@@ -18,14 +18,14 @@ public class View implements java.util.Observer {
 
     private JTextField myTextField;
     private JButton button;
-    private final WordsUI ui;
+    private UI ui;
 
     /**
      * 
      */
     public View() {
         System.out.println("View()");
-        ui = new WordsUI();
+        ui = new UI();
         ui.addWindowListener(new CloseListener());
         ui.setLocation(100,100);
         ui.setVisible(true);
@@ -41,19 +41,6 @@ public class View implements java.util.Observer {
     @Override
     public void update(Observable o, Object arg) {        
         ui.update(o, arg);
-    }
-    
-    /**
-     * Not sure this is what I want to do.
-     * @param s 
-     */
-    public void setValue(String s) {
-        ui.setValue(s);
-    }
-    
-    public void addController(ActionListener controller) {
-        System.out.println("View: adding controller");
-        ui.addControllerToButton(controller);
     }
     
     /**

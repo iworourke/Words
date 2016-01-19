@@ -14,7 +14,7 @@ import words.Controller.Controller;
 import words.View.View;
 import javax.swing.*;
 import words.Model.Model;
-import words.View.WordsUI;
+import words.View.UI;
 
 /**
  *
@@ -54,7 +54,7 @@ public class Driver implements GlobalPathNames {
         myController.addView(myView);
         myController.initModel(starting_poem);
         
-        myView.addController(myController);
+        //myView.addController(myController);
         
     }
     
